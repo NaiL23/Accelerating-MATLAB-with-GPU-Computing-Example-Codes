@@ -1,1 +1,2 @@
+mex helloMex.cpp
 helloMex;
