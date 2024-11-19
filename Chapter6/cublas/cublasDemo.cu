@@ -48,19 +48,13 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, mxArray *prhs[])
     float alpha = 1.0f;
     float beta = 0.0f;
     cublasSgemm(handle,
-                CUBLAS_OP_N,
-                CUBLAS_OP_N,
-                numARows,
-                numBCols,
-                numACols,
-                &alpha,
-                deviceA,
-                numARows,
-                deviceB,
-                numBRows,
+                CUBLAS_OP_N, CUBLAS_OP_N,
+                numARows, numBCols, numACols,
+                &alpha, 
+                deviceA, numARows,
+                deviceB, numBRows,
                 &beta,
-                deviceC,
-                numCRows);
+                deviceC, numCRows);
     
     cublasGetMatrix(numCRows,
                     numCCols,
