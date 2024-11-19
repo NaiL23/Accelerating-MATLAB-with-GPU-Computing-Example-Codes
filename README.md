@@ -1,5 +1,7 @@
-# Accelerating-MATLAB-with-GPU-Computing-Example-Codes
+# Accelerating MATLAB with GPU Computing Example Codes
+
 Modified code examples for book *Suh, Kim: Accelerating MATLAB with GPU Computing: A Primer with Examples*.
+
 
 In the official implementation ([download](https://booksite.elsevier.com/9780124080805)), codes are organized and compiled in a pipeline as below:
 
