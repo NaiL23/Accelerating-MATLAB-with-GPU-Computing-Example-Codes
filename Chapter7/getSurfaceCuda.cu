@@ -317,15 +317,8 @@ __global__ void getTriangles(float isovalue,
                              float3* vertexBin, int* triCounter)
 {
     int i = blockIdx.x * blockDim.x + threadIdx.x;
-
-    // compute capability >= 2.x
-    //int j = blockIdx.y * blockDim.y + threadIdx.y;
-    //int k = blockIdx.z * blockDim.z + threadIdx.z;
-
-    // compute capability < 2.x
-    int gy = (sizeY + blockDim.y - 1) / blockDim.y;
-    int j = (blockIdx.y % gy) * blockDim.y + threadIdx.y;
-    int k = (blockIdx.y / gy) * blockDim.z + threadIdx.z;
+    int j = blockIdx.y * blockDim.y + threadIdx.y;
+    int k = blockIdx.z * blockDim.z + threadIdx.z;
 
     if (i >= sizeX - 1 || j >= sizeY - 1 || k >= sizeZ - 1)
         return;
@@ -443,18 +436,10 @@ void marchingCubes(float isovalue,
     cudaMemset(devTriCounter, 0, sizeof(int) * totalSize);
 
     dim3 blockSize(4, 4, 4);
-
-    // compute capability >= 2.x
-    //dim3 gridSize((sizeX + blockSize.x - 1) / blockSize.x,
-    //              (sizeY + blockSize.y - 1) / blockSize.y,
-    //              (sizeZ + blockSize.z - 1) / blockSize.z);
-
-    // compute capabiltiy < 2.x
-    int gy = (sizeY + blockSize.y - 1) / blockSize.y;
-    int gz = (sizeZ + blockSize.z - 1) / blockSize.z;
     dim3 gridSize((sizeX + blockSize.x - 1) / blockSize.x,
-                  gy * gz,
-                  1);
+                 (sizeY + blockSize.y - 1) / blockSize.y,
+                 (sizeZ + blockSize.z - 1) / blockSize.z);
+
 
     getTriangles<<<gridSize, blockSize>>>(isovalue,
                                           devX, devY, devZ, devV,
@@ -519,8 +504,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     if (nlhs != 2)
         mexErrMsgTxt("Invalid number of outputs");
     
-    if (!mxIsSingle(prhs[0]) && !mxIsSingle(prhs[1]) &&
-        !mxIsSingle(prhs[2]) && !mxIsSingle(prhs[3]) &&
+    if (!mxIsSingle(prhs[0]) || !mxIsSingle(prhs[1]) ||
+        !mxIsSingle(prhs[2]) || !mxIsSingle(prhs[3]) ||
         !mxIsSingle(prhs[4]))
         mexErrMsgTxt("input vector data type must be single");
     
