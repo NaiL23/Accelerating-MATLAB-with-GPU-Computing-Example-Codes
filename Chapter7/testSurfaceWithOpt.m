@@ -10,6 +10,10 @@ tic
 [Vertices2, Indices2] = getSurfaceWithOpt(X, Y, Z, V, isovalue);
 toc
 
+% measure gpu time with gputimeit()
+f = @() getSurfaceWithOpt(X, Y, Z, V, isovalue);
+gputimeit(f, 2)
+
 % visualize triangles
 figure
 p = patch('Faces', Indices2, 'Vertices', Vertices2);

@@ -435,7 +435,7 @@ void marchingCubes(float isovalue,
     cudaMalloc(&devTriCounter, sizeof(int) * totalSize);
     cudaMemset(devTriCounter, 0, sizeof(int) * totalSize);
 
-    dim3 blockSize(4, 4, 4);
+    dim3 blockSize(8, 8, 8);
     dim3 gridSize((sizeX + blockSize.x - 1) / blockSize.x,
                  (sizeY + blockSize.y - 1) / blockSize.y,
                  (sizeZ + blockSize.z - 1) / blockSize.z);
